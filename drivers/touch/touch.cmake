@@ -1,4 +1,4 @@
-set(DRIVER_NAME touch)
+set(DRIVER_NAME capacitive_touch)
 add_library(${DRIVER_NAME} INTERFACE)
 
 target_sources(${DRIVER_NAME} INTERFACE
