@@ -11,4 +11,5 @@ pico_sdk_init()
 
 add_subdirectory(drivers)
 add_subdirectory(app)
+add_subdirectory(utils)
 

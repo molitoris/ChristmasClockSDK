@@ -9,7 +9,7 @@ public:
     CapacitiveTouch(unsigned int scl_pin, unsigned int sda_pin, unsigned int m_iqr_pin);
     ~CapacitiveTouch() = default;
 
-    void config();
+    int config();
     void readTouchStatus();
 protected:
     int write_blocking();
