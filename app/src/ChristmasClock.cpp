@@ -8,13 +8,14 @@ namespace ChristmasClock {
 ChristmasClock::ChristmasClock(): _touch(19, 18, 17) {}
 
 int ChristmasClock::init() {
-    auto res = _touch.config();
+    auto res = _touch.init();
     if(res != 0) {
         printf("Failed to configure touch: %d\n", res);
         return res;
     }
 
     // initialization successfull
+    printf("Startup successfull");
     return 0;
 }
 
