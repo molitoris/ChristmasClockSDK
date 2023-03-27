@@ -1,19 +1,23 @@
 tasks:
   - name: Setup environment
-    init: >
-      sudo apt update &&
-      sudo apt install cmake gcc-arm-none-eabi libnewlib-arm-none-eabi build-essential -y &&
-      export PICO_SDK_FETCH_FROM_GIT=true &&
-      mkdir --parent ./build &&
-      cmake -S . -B ./build &&
-      cmake --build ./build
+    init: |
+      (
+        set -e
+        sudo apt update &&
+        sudo apt install cmake gcc-arm-none-eabi libnewlib-arm-none-eabi build-essential -y &&
+        export PICO_SDK_FETCH_FROM_GIT=true &&
+        mkdir --parent ./build &&
+        cmake -S . -B ./build &&
+        cmake --build ./build
+      )
+      
 
 github:
   prebuilds:
     # enable for the default branch (defaults to true)
     master: true
     # enable for all branches in this repo (defaults to false)
-    branches: false
+    branches: true
     # enable for pull requests coming from this repo (defaults to true)
     pullRequests: true
     # enable for pull requests coming from forks (defaults to false)
