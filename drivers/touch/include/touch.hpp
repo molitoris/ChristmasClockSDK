@@ -5,8 +5,15 @@
 namespace ChristmasClock {
 
 enum REGISTER {
-    ECR = 0x5E,
-    SOFT_RESET = 0x80
+    AUTOCONFIG = 0x7B,
+    // VDD = 3.3V
+    UP_SIDE_LIMIT,          // USL = (VDD-0.7) / VDD x 256
+    TARGET_LIMIT,           // TL = USL x 0.9
+    LOW_SIDE_LIMIT,         // LSL = USL x 0.65
+    ECR = 0x5E,             // Electrode Configuration Register
+    SOFT_RESET = 0x80,      // Soft reset
+    TOUCH_STAT_0 = 0x00,    // Touch/release status of each electrode of first eight buttons
+    TOUCH_STAT_1 = 0x01     // Touch/release status of each electrode of remaining five buttons
 };
 
 class CapacitiveTouch {
@@ -14,27 +21,16 @@ public:
     CapacitiveTouch(unsigned int scl_pin, unsigned int sda_pin, unsigned int m_iqr_pin);
     ~CapacitiveTouch() = default;
 
-    int config();
+    int init();
     void readTouchStatus();
 protected:
-    int write_register(const uint8_t reg, const uint8_t value, const uint8_t size = 1, const unsigned int timeout_us=500) const;
+    int write_register(const uint8_t reg, const uint8_t value) const;
+    void read_register(const uint8_t reg, uint8_t* data, uint8_t size);
 private:
     unsigned int m_scl_pin;
     unsigned int m_sda_pin;
     unsigned int m_iqr_pin;
     
-    uint8_t m_buf[2]; // Used to write to sensor
-
     static const unsigned int usedButtons = 6;
-
-    // Hardware registers
-    static uint8_t REG_TOUCH_STAT_0;
-    static uint8_t REG_TOUCH_STAT_1;
-    static uint8_t REG_ECR;
-    
-    static const uint8_t REG_CONF_0 = 0x5c;         // Filter & Charge Discharge Current
-    static const uint8_t REG_CONF_1 = 0x5D;         // Charge Discharge Time & Second Filter Iterations & Electrode Sample Interval
-    
-
 };
 }
