@@ -16,8 +16,8 @@ int main() {
 
     ChristmasClock::ChristmasClock clock;
     const int state = clock.init();
-    if(state != 0) {
-        printf("Could not initialize clock\n");
+    if(state < 0) {
+        printf("Could not initialize clock: %d\n", state);
         return state;
     }
     
