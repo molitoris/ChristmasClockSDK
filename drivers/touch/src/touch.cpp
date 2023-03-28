@@ -42,6 +42,25 @@ int CapacitiveTouch::init() {
         return res;
     }
 
+    set_threshold(12, 6);
+
+    // Raising
+    write_register(REGISTER::MHDR, 0x01);
+    write_register(REGISTER::NHDR, 0x01);
+    write_register(REGISTER::NCLR, 0x0E);
+    write_register(REGISTER::FDLR, 0x00);
+
+    // Falling
+    write_register(REGISTER::MHDF, 0x01);
+    write_register(REGISTER::NHDF, 0x05);
+    write_register(REGISTER::NCLF, 0x01);
+    write_register(REGISTER::FDLF, 0x00);
+
+    // Touched
+    write_register(REGISTER::NHDT, 0x00);
+    write_register(REGISTER::NCLT, 0x00);
+    write_register(REGISTER::FDLT, 0x00);
+
     // Auto-Configure sensor
     res = write_register(REGISTER::AUTOCONFIG, 0x0B);
     if(res != 2) {
@@ -78,10 +97,19 @@ void CapacitiveTouch::read_register(const uint8_t reg, uint8_t* data, uint8_t si
 
 }
 
+void CapacitiveTouch::set_threshold(uint8_t touch, uint8_t release) {
+    for (uint8_t i = 0; i < usedButtons; ++i) {
+        write_register(REGISTER::TOUCH_THRESHOLD + 2 * i, touch);
+        write_register(REGISTER::RELEASE_THRESHOLD + 2 * i, release);
+  }
+}
+
 void CapacitiveTouch::readTouchStatus() {
     //Read touch status
     uint8_t data = 0x0;
     read_register(REGISTER::TOUCH_STAT_0, &data, 1);
+
+    printf("Button data: %d\n", data);
 
     // Check every sensor if it was touched
     for (uint8_t i = 0; i < usedButtons; ++i) {
